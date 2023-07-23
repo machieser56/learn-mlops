@@ -131,3 +131,4 @@ dmypy.json
 
 # MLFlow autolog data
 src/mlruns/
+mlruns/
