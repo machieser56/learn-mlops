@@ -5,6 +5,14 @@ on:
     branches: [ main ]
 
 jobs:
+  job0:
+    name: test dev vars
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+    - name: Print resource group name
+      run: echo "${{vars.RESOURCEGROUP_NAME}}"
+    
   job1:
     name: train model on dev data
     environment: development
