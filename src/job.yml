@@ -1,15 +1,15 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
-code: model
+code: model/
 command: >-
-  python src/model/train.py
+  python train.py
   --training_data ${{inputs.training_data}}
   --reg_rate ${{inputs.reg_rate}}
 inputs:
   training_data: 
     type: uri_folder 
-    path: azureml:diabetes-dev-folder:2
+    path: azureml:diabetes-dev-folder:1
   reg_rate: 0.01
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
-compute: mlopsinstance1
+compute: mlops-compute-8547-t
 experiment_name: diabetes-dev
 description: use the experimentation (dev) data to train the model
