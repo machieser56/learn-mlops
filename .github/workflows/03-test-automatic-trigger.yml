@@ -34,6 +34,9 @@ jobs:
     - name: Install pytest
       run: |
         python -m pip install pytest
+    - name: Install mlflow
+      run: |
+        python -m pip install mlflow
     - name: Run unit tests
       run: | 
         pytest tests/
