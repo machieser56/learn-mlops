@@ -11,7 +11,7 @@ inputs:
   compute: 
     type: string
     default: mlops-cluster-t
-  reg_rate: 0.01
+  reg_rate: 0.015
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
 compute: ${{inputs.compute}}
 experiment_name: diabetes-dev
