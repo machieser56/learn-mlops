@@ -31,12 +31,9 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: '3.8'
-    - name: Install pytest
+    - name: Install requirements
       run: |
-        python -m pip install pytest
-    - name: Install mlflow
-      run: |
-        python -m pip install mlflow
+        python -m pip install -r requirements.txt
     - name: Run unit tests
       run: | 
         pytest tests/
