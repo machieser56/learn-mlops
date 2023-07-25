@@ -5,6 +5,7 @@ on:
 
 jobs:
   train:
+    environment: development
     runs-on: ubuntu-latest
     steps:
     - name: Check out repo
@@ -16,6 +17,6 @@ jobs:
       with:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - name: Submit Azure ML job
-      run: az ml job create --file src/job.yml --resource-group mlops-t --workspace-name mlops-t --name diabetes-job-github-action
+      run: az ml job create --file src/job.yml ${{vars.RESOURCEGROUP_NAME}} --workspace-name ${{vars.WORKSPACE_NAME}} --name diabetes-job-github-manual-action --set inputs.training_data.path=${{vars.TRAININGDATA_PATH}} compute=${{vars.COMPUTECLUSTER_NAME}}
 
 
