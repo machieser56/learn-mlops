@@ -1,0 +1,37 @@
+name: Automated modelt training for dev and prod data
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  train_model_dev:
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Submit Azure ML job
+      run: az ml job create --file src/job.yml --resource-group ${{vars.RESOURCEGROUP_NAME}} --workspace-name ${{vars.WORKSPACE_NAME}} --name diabetes-job-github-manual-action --set inputs.training_data.path=${{vars.TRAININGDATA_PATH}} compute=${{vars.COMPUTECLUSTER_NAME}} --stream
+  train_model_prod:
+    needs: train_model_dev
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Submit Azure ML job
+      run: az ml job create --file src/job.yml --resource-group ${{vars.RESOURCEGROUP_NAME}} --workspace-name ${{vars.WORKSPACE_NAME}} --name diabetes-job-github-manual-action-prod --set inputs.training_data.path=${{vars.TRAININGDATA_PATH}} compute=${{vars.COMPUTECLUSTER_NAME}} --stream
+  
