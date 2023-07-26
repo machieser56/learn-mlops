@@ -1,0 +1,24 @@
+name: Manually deploy model to endpoint
+
+on:
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+    - name: Deploy online endpoint
+      run: az ml online-endpoint create --name diabetesMlflowEndpoint -f production/endpoints/endpoint.yml
+    - name: Deploy model to endpoint
+      run: az ml online-deployment create --name diabetesMlflowDeployment --endpoint-name diabetesMlflowEndpoint -f production/endpoints/deployment.yml --all-traffic
+    
+
