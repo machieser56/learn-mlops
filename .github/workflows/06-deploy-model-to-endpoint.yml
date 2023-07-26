@@ -18,17 +18,15 @@ jobs:
         creds: ${{secrets.AZURE_CREDENTIALS}}
     - name: Check if endpoint exists
       run: az ml online-endpoint show --name diabetesMlflowEndpoint --resource-group ${{vars.RESOURCEGROUP_NAME}} --workspace-name ${{vars.WORKSPACE_NAME}}
-      continue-on-error: true
     - name: Deploy online endpoint if not already existing
       if: failure()
       run: az ml online-endpoint create --name diabetesMlflowEndpoint -f production/endpoints/endpoint.yml --resource-group ${{vars.RESOURCEGROUP_NAME}} --workspace-name ${{vars.WORKSPACE_NAME}}
     - name: Check if deployment exists
       run: az ml online-deployment show --name diabetesMlflowDeployment --endpoint-name diabetesMlflowEndpoint --resource-group ${{vars.RESOURCEGROUP_NAME}} --workspace-name ${{vars.WORKSPACE_NAME}}
-      continue-on-error: true
     - name: Deploy model to endpoint
       if: failure()
       run: az ml online-deployment create --name diabetesMlflowDeployment --endpoint-name diabetesMlflowEndpoint -f production/endpoints/deployment.yml  --resource-group ${{vars.RESOURCEGROUP_NAME}} --workspace-name ${{vars.WORKSPACE_NAME}} --all-traffic
     - name: Update model on endpoint
       if: success()
-      run: az ml online-deployment update --name diabetesMlflowDeployment --endpoint-name diabetesMlflowEndpoint -f production/endpoints/deployment.yml  --resource-group ${{vars.RESOURCEGROUP_NAME}} --workspace-name ${{vars.WORKSPACE_NAME}} --all-traffic
+      run: az ml online-deployment update --name diabetesMlflowDeployment --endpoint-name diabetesMlflowEndpoint -f production/endpoints/deployment.yml  --resource-group ${{vars.RESOURCEGROUP_NAME}} --workspace-name ${{vars.WORKSPACE_NAME}}
 
